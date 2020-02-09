@@ -1,11 +1,13 @@
 [database]
 adapter  = Mysql
-host     = localhost
+host     = 10.0.14.23
+port     = 3336
 username = root
-password = 
-dbname   = robotics
+password = D3vP@ssw0rd
+dbname   = css
 
 [application]
+controllerDir   = /controllers/
 modelsDir       = app/models/
 migrationsDir   = app/migrations/
 viewsDir        = app/views/

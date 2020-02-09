@@ -13,10 +13,13 @@ return new \Phalcon\Config([
     
     'database' => [
         'adapter'     => 'Mysql',
-        'host'        => 'localhost',
+        'host'        => '10.0.14.23',
+        'port'        => '3336',
         'username'    => 'root',
-        'password'    => 'puSmXlr8MbmACBkMxBER6A==',
-        'dbname'      => 'robotics',
+        // 'password'    => 'D3vP@ssw0rd', // For CLI use only and for removal upon deployment
+        // 'password'    => 'puSmXlr8MbmACBkMxBER6A==', // Blank password
+        'password'    => 'decqvw/Nx3GeZIq5kUqIMSkjOD11LJfDJ4Vz', // D3vP@ssw0rd
+        'dbname'      => 'css',
         'charset'     => 'utf8'
     ],
     'application' => [

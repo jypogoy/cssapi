@@ -64,6 +64,7 @@ $di->setShared('db', function () {
     $class = 'Phalcon\Db\Adapter\Pdo\\' . $config->database->adapter;
     $params = [
         'host'     => $config->database->host,
+        'port'     => $config->database->port,
         'username' => $config->database->username,
         'password' => $crypt->decryptBase64($config->database->password, $crypt->getKey()),
         'dbname'   => $config->database->dbname,
@@ -75,6 +76,6 @@ $di->setShared('db', function () {
     }
 
     $connection = new $class($params);
-
+    
     return $connection;
 });
