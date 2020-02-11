@@ -2,7 +2,11 @@
 
 use Phalcon\Mvc\View\Simple as View;
 use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Crypt;
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\File as FileAdapter;
+use Phalcon\Logger\Formatter\Line as FormatterLine;
 
 /**
  * Shared configuration service
@@ -42,7 +46,7 @@ $di->set('crypt', function () {
 
     // Set a global encryption key
     $crypt->setKey(
-        '%31.1e$i86e$f!8jz'
+        $this->getConfig()->encrypt_key
     );
 
     // Set the applicable cipher method. Default is AES-256-CFB. 
@@ -55,27 +59,82 @@ true
 );
 
 /**
- * Database connection is created based in the parameters defined in the configuration file
+ * Database connection is created based on the parameters defined in the configuration file
  */
-$di->setShared('db', function () {
+$di->setShared('db_css', function () {
     $config = $this->getConfig();
     $crypt = $this->getCrypt();
 
-    $class = 'Phalcon\Db\Adapter\Pdo\\' . $config->database->adapter;
+    $class = 'Phalcon\Db\Adapter\Pdo\\' . $config->db_css->adapter;
     $params = [
-        'host'     => $config->database->host,
-        'port'     => $config->database->port,
-        'username' => $config->database->username,
-        'password' => $crypt->decryptBase64($config->database->password, $crypt->getKey()),
-        'dbname'   => $config->database->dbname,
-        'charset'  => $config->database->charset
+        'host'     => $config->db_css->host,
+        'port'     => $config->db_css->port,
+        'username' => $config->db_css->username,
+        'password' => $crypt->decryptBase64($config->db_css->password, $crypt->getKey()),
+        'dbname'   => $config->db_css->dbname,
+        'charset'  => $config->db_css->charset
     ];
 
-    if ($config->database->adapter == 'Postgresql') {
+    if ($config->db_css->adapter == 'Postgresql') {
         unset($params['charset']);
     }
 
     $connection = new $class($params);
     
     return $connection;
+});
+
+$di->setShared('db_beis', function () {
+    $config = $this->getConfig();
+    $crypt = $this->getCrypt();
+
+    $class = 'Phalcon\Db\Adapter\Pdo\\' . $config->db_beis->adapter;
+    $params = [
+        'host'     => $config->db_beis->host,
+        'port'     => $config->db_beis->port,
+        'username' => $config->db_beis->username,
+        'password' => $crypt->decryptBase64($config->db_beis->password, $crypt->getKey()),
+        'dbname'   => $config->db_beis->dbname,
+        'charset'  => $config->db_beis->charset
+    ];
+
+    if ($config->db_beis->adapter == 'Postgresql') {
+        unset($params['charset']);
+    }
+
+    $connection = new $class($params);
+    
+    return $connection;
+});
+
+/**
+ * Logger service
+ */
+$di->set('logger', function ($filename = null) {
+    $config = $this->getConfig();
+    $format   = $config->get('log_settings')->format;
+    $path     = rtrim($config->get('log_settings')->path, '\\/') . DIRECTORY_SEPARATOR;
+    $formatter = new FormatterLine($format, $config->get('log_settings')->date);    
+    $logger    = new FileAdapter($path . $filename);
+    $logger->setFormatter($formatter);
+    $logger->setLogLevel($config->get('log_settings')->logLevel);
+    return $logger;
+});
+
+$di->set('sessionLogger', function () {
+    $config = $this->getConfig();
+    $filename = trim($config->get('log_filenames')->session, '\\/');
+    return $this->get('logger', array($filename));
+});
+
+$di->set('commonLogger', function () {
+    $config = $this->getConfig();
+    $filename = trim($config->get('log_filenames')->common, '\\/');
+    return $this->get('logger', array($filename));
+});
+
+$di->set('errorLogger', function () {
+    $config = $this->getConfig();
+    $filename = trim($config->get('log_filenames')->error, '\\/');
+    return $this->get('logger', array($filename));
 });

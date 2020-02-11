@@ -2,24 +2,24 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Response;
-use Models\Area;
+use Models\Mov;
 
-class AreaController extends _ControllerBase
+class MovController extends _ControllerBase
 {
 
     public function all()
     {
         try {
-            $areas = Area::find(
+            $movs = Mov::find(
                 [
-                    'order' =>  'name'
+                    'order' =>  'indicator_id'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($movs as $mov) {
+                $data[] = $mov;
             }
             
             echo json_encode($data);
@@ -32,17 +32,17 @@ class AreaController extends _ControllerBase
     public function search($keyword)
     {
         try {
-            $areas = Area::find(
+            $movs = Mov::find(
                 [
-                    'conditions'    => 'name LIKE \'%' . $keyword . '%\'',
-                    'order'         =>  'name'
+                    'conditions'    =>  'indicator_id = ' . $keyword,
+                    'order'         =>  'indicator_id'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($movs as $mov) {
+                $data[] = $mov;
             }
 
             echo json_encode($data);
@@ -55,14 +55,14 @@ class AreaController extends _ControllerBase
     public function get($id) 
     {
         try {
-            $area = Area::findFirst(
+            $mov = Mov::findFirst(
                 [
                     'conditions'    =>  'id = ' . $id
                 ]
             );   
 
             $response = new Response();
-            if ($area === false) {
+            if ($mov === false) {
                 $response->setJsonContent(
                     [
                         'status' => 'NOT-FOUND'
@@ -72,7 +72,7 @@ class AreaController extends _ControllerBase
                 $response->setJsonContent(
                     [
                         'status' => 'FOUND',
-                        'data'   => $area
+                        'data'   => $mov
                     ]
                 );
             }
@@ -89,21 +89,21 @@ class AreaController extends _ControllerBase
 
         $json = $this->request->getJsonRawBody();
 
-        $area = new Area();
+        $mov = new Mov();
         foreach ($json as $attrib => $value) {
-            $area->writeAttribute($attrib, $value);
+            $mov->writeAttribute($attrib, $value);
         }
         
         try {
             
             $response = new Response();
             
-            if ($area->save()) { // Save returns last created id
+            if ($mov->save()) { // Save returns last created id
                 $response->setStatusCode(201, 'Created');
                 $response->setJsonContent(
                     [
                         'status' => 'OK',
-                        'data'   => $area,
+                        'data'   => $mov,
                     ]
                 );
             } else {
@@ -134,14 +134,14 @@ class AreaController extends _ControllerBase
         try {
             $json = $this->request->getJsonRawBody();
 
-            $area = Area::findFirst("id = " . $id);
+            $mov = Mov::findFirst("id = " . $id);
             foreach ($json as $attrib => $value) {
-                $area->writeAttribute($attrib, $value);
+                $mov->writeAttribute($attrib, $value);
             }
 
             $response = new Response();
 
-            if ($area->update()) {
+            if ($mov->update()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'
@@ -173,11 +173,11 @@ class AreaController extends _ControllerBase
     public function delete($id)
     {
         try {
-            $area = Area::findFirst("id = " . $id);
+            $mov = Mov::findFirst("id = " . $id);
 
             $response = new Response();
 
-            if ($area->delete()) {
+            if ($mov->delete()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'

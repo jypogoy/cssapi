@@ -2,24 +2,24 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Response;
-use Models\Area;
+use Models\School;
 
-class AreaController extends _ControllerBase
+class SchoolController extends _ControllerBase
 {
 
     public function all()
     {
         try {
-            $areas = Area::find(
+            $schools = School::find(
                 [
-                    'order' =>  'name'
+                    'order' =>  'school_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($schools as $School) {
+                $data[] = $School;
             }
             
             echo json_encode($data);
@@ -32,17 +32,17 @@ class AreaController extends _ControllerBase
     public function search($keyword)
     {
         try {
-            $areas = Area::find(
+            $schools = School::find(
                 [
-                    'conditions'    => 'name LIKE \'%' . $keyword . '%\'',
-                    'order'         =>  'name'
+                    'conditions'    => 'school_name LIKE \'%' . $keyword . '%\'',
+                    'order'         =>  'school_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($schools as $School) {
+                $data[] = $School;
             }
 
             echo json_encode($data);
@@ -55,14 +55,14 @@ class AreaController extends _ControllerBase
     public function get($id) 
     {
         try {
-            $area = Area::findFirst(
+            $School = School::findFirst(
                 [
                     'conditions'    =>  'id = ' . $id
                 ]
             );   
 
             $response = new Response();
-            if ($area === false) {
+            if ($School === false) {
                 $response->setJsonContent(
                     [
                         'status' => 'NOT-FOUND'
@@ -72,7 +72,7 @@ class AreaController extends _ControllerBase
                 $response->setJsonContent(
                     [
                         'status' => 'FOUND',
-                        'data'   => $area
+                        'data'   => $School
                     ]
                 );
             }
@@ -89,21 +89,21 @@ class AreaController extends _ControllerBase
 
         $json = $this->request->getJsonRawBody();
 
-        $area = new Area();
+        $School = new School();
         foreach ($json as $attrib => $value) {
-            $area->writeAttribute($attrib, $value);
+            $School->writeAttribute($attrib, $value);
         }
         
         try {
             
             $response = new Response();
             
-            if ($area->save()) { // Save returns last created id
+            if ($School->save()) { // Save returns last created id
                 $response->setStatusCode(201, 'Created');
                 $response->setJsonContent(
                     [
                         'status' => 'OK',
-                        'data'   => $area,
+                        'data'   => $School,
                     ]
                 );
             } else {
@@ -134,14 +134,14 @@ class AreaController extends _ControllerBase
         try {
             $json = $this->request->getJsonRawBody();
 
-            $area = Area::findFirst("id = " . $id);
+            $School = School::findFirst("id = " . $id);
             foreach ($json as $attrib => $value) {
-                $area->writeAttribute($attrib, $value);
+                $School->writeAttribute($attrib, $value);
             }
 
             $response = new Response();
 
-            if ($area->update()) {
+            if ($School->update()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'
@@ -173,11 +173,11 @@ class AreaController extends _ControllerBase
     public function delete($id)
     {
         try {
-            $area = Area::findFirst("id = " . $id);
+            $School = School::findFirst("id = " . $id);
 
             $response = new Response();
 
-            if ($area->delete()) {
+            if ($School->delete()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'

@@ -2,7 +2,7 @@
 
 namespace Models;
 
-class Mov extends \Phalcon\Mvc\Model
+class Barangay extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -15,47 +15,54 @@ class Mov extends \Phalcon\Mvc\Model
      *
      * @var integer
      */
-    public $indicator_id;
+    public $municipality_id;
+
+    /**
+     *
+     * @var string
+     */
+    public $psgc_barangay_code;
+
+    /**
+     *
+     * @var string
+     */
+    public $barangay_name;
+
+    /**
+     *
+     * @var string
+     */
+    public $created_date;
 
     /**
      *
      * @var integer
      */
-    public $school_profiles_id;
+    public $created_by;
 
     /**
      *
      * @var string
      */
-    public $file_name;
+    public $modified_date;
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    public $file_type;
-
-    /**
-     *
-     * @var string
-     */
-    public $url;
-
-    /**
-     *
-     * @var string
-     */
-    public $created_at;
+    public $modified_by;
 
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->setConnectionService('db_css'); // Explicity define the db connection used since working with multiple.
-        $this->setSchema("css");
-        $this->setSource("mov");
-        $this->belongsTo('indicator_id', 'Indicator', 'id', ['alias' => 'Indicator']);
+        $this->setConnectionService('db_beis'); // Explicity define the db connection used since working with multiple.
+        $this->setSchema("beis");
+        $this->setSource("barangay");
+        $this->hasMany('id', 'Models\School', 'barangay_id', ['alias' => 'School']);
+        $this->belongsTo('municipality_id', 'Models\Municipality', 'id', ['alias' => 'Municipality']);
     }
 
     /**
@@ -65,14 +72,14 @@ class Mov extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'mov';
+        return 'barangay';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mov[]|Mov|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return Barangay[]|Barangay|\Phalcon\Mvc\Model\ResultSetInterface
      */
     public static function find($parameters = null)
     {
@@ -83,7 +90,7 @@ class Mov extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mov|\Phalcon\Mvc\Model\ResultInterface
+     * @return Barangay|\Phalcon\Mvc\Model\ResultInterface
      */
     public static function findFirst($parameters = null)
     {

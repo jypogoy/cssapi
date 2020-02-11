@@ -2,23 +2,23 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Response;
-use Models\Area;
+use Models\Division;
 
-class AreaController extends _ControllerBase
+class DivisionController extends _ControllerBase
 {
 
     public function all()
     {
         try {
-            $areas = Area::find(
+            $divisions = Division::find(
                 [
-                    'order' =>  'name'
+                    'order' =>  'division_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
+            foreach ($divisions as $area) {
                 $data[] = $area;
             }
             
@@ -32,16 +32,16 @@ class AreaController extends _ControllerBase
     public function search($keyword)
     {
         try {
-            $areas = Area::find(
+            $divisions = Division::find(
                 [
-                    'conditions'    => 'name LIKE \'%' . $keyword . '%\'',
-                    'order'         =>  'name'
+                    'conditions'    => 'division_name LIKE \'%' . $keyword . '%\'',
+                    'order'         =>  'division_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
+            foreach ($divisions as $area) {
                 $data[] = $area;
             }
 
@@ -55,7 +55,7 @@ class AreaController extends _ControllerBase
     public function get($id) 
     {
         try {
-            $area = Area::findFirst(
+            $area = Division::findFirst(
                 [
                     'conditions'    =>  'id = ' . $id
                 ]
@@ -89,7 +89,7 @@ class AreaController extends _ControllerBase
 
         $json = $this->request->getJsonRawBody();
 
-        $area = new Area();
+        $area = new Division();
         foreach ($json as $attrib => $value) {
             $area->writeAttribute($attrib, $value);
         }
@@ -134,7 +134,7 @@ class AreaController extends _ControllerBase
         try {
             $json = $this->request->getJsonRawBody();
 
-            $area = Area::findFirst("id = " . $id);
+            $area = Division::findFirst("id = " . $id);
             foreach ($json as $attrib => $value) {
                 $area->writeAttribute($attrib, $value);
             }
@@ -173,7 +173,7 @@ class AreaController extends _ControllerBase
     public function delete($id)
     {
         try {
-            $area = Area::findFirst("id = " . $id);
+            $area = Division::findFirst("id = " . $id);
 
             $response = new Response();
 

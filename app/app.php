@@ -14,7 +14,7 @@ $app->get('/', function () {
 include APP_PATH . '/config/handlers.php';
 
 /**
- * Error handler
+ * Global Error handler
  */
 $app->error(function () use($app) {
     $app->response->setStatusCode(500, "Error")->sendHeaders();

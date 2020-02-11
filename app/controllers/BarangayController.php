@@ -2,24 +2,24 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Response;
-use Models\Area;
+use Models\Barangay;
 
-class AreaController extends _ControllerBase
+class BarangayController extends _ControllerBase
 {
 
     public function all()
     {
         try {
-            $areas = Area::find(
+            $barangay = Barangay::find(
                 [
-                    'order' =>  'name'
+                    'order' =>  'barangay_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($barangay as $Barangay) {
+                $data[] = $Barangay;
             }
             
             echo json_encode($data);
@@ -32,17 +32,17 @@ class AreaController extends _ControllerBase
     public function search($keyword)
     {
         try {
-            $areas = Area::find(
+            $barangay = Barangay::find(
                 [
-                    'conditions'    => 'name LIKE \'%' . $keyword . '%\'',
-                    'order'         =>  'name'
+                    'conditions'    => 'barangay_name LIKE \'%' . $keyword . '%\'',
+                    'order'         =>  'barangay_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($barangay as $Barangay) {
+                $data[] = $Barangay;
             }
 
             echo json_encode($data);
@@ -55,14 +55,14 @@ class AreaController extends _ControllerBase
     public function get($id) 
     {
         try {
-            $area = Area::findFirst(
+            $Barangay = Barangay::findFirst(
                 [
                     'conditions'    =>  'id = ' . $id
                 ]
             );   
 
             $response = new Response();
-            if ($area === false) {
+            if ($Barangay === false) {
                 $response->setJsonContent(
                     [
                         'status' => 'NOT-FOUND'
@@ -72,7 +72,7 @@ class AreaController extends _ControllerBase
                 $response->setJsonContent(
                     [
                         'status' => 'FOUND',
-                        'data'   => $area
+                        'data'   => $Barangay
                     ]
                 );
             }
@@ -89,21 +89,21 @@ class AreaController extends _ControllerBase
 
         $json = $this->request->getJsonRawBody();
 
-        $area = new Area();
+        $Barangay = new Barangay();
         foreach ($json as $attrib => $value) {
-            $area->writeAttribute($attrib, $value);
+            $Barangay->writeAttribute($attrib, $value);
         }
         
         try {
             
             $response = new Response();
             
-            if ($area->save()) { // Save returns last created id
+            if ($Barangay->save()) { // Save returns last created id
                 $response->setStatusCode(201, 'Created');
                 $response->setJsonContent(
                     [
                         'status' => 'OK',
-                        'data'   => $area,
+                        'data'   => $Barangay,
                     ]
                 );
             } else {
@@ -134,14 +134,14 @@ class AreaController extends _ControllerBase
         try {
             $json = $this->request->getJsonRawBody();
 
-            $area = Area::findFirst("id = " . $id);
+            $Barangay = Barangay::findFirst("id = " . $id);
             foreach ($json as $attrib => $value) {
-                $area->writeAttribute($attrib, $value);
+                $Barangay->writeAttribute($attrib, $value);
             }
 
             $response = new Response();
 
-            if ($area->update()) {
+            if ($Barangay->update()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'
@@ -173,11 +173,11 @@ class AreaController extends _ControllerBase
     public function delete($id)
     {
         try {
-            $area = Area::findFirst("id = " . $id);
+            $Barangay = Barangay::findFirst("id = " . $id);
 
             $response = new Response();
 
-            if ($area->delete()) {
+            if ($Barangay->delete()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'

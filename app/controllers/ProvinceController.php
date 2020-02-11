@@ -2,24 +2,24 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Response;
-use Models\Area;
+use Models\Province;
 
-class AreaController extends _ControllerBase
+class ProvinceController extends _ControllerBase
 {
 
     public function all()
     {
         try {
-            $areas = Area::find(
+            $provinces = Province::find(
                 [
-                    'order' =>  'name'
+                    'order' =>  'province_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($provinces as $province) {
+                $data[] = $province;
             }
             
             echo json_encode($data);
@@ -32,17 +32,17 @@ class AreaController extends _ControllerBase
     public function search($keyword)
     {
         try {
-            $areas = Area::find(
+            $provinces = Province::find(
                 [
-                    'conditions'    => 'name LIKE \'%' . $keyword . '%\'',
-                    'order'         =>  'name'
+                    'conditions'    => 'province_name LIKE \'%' . $keyword . '%\'',
+                    'order'         =>  'province_name'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($provinces as $province) {
+                $data[] = $province;
             }
 
             echo json_encode($data);
@@ -55,14 +55,14 @@ class AreaController extends _ControllerBase
     public function get($id) 
     {
         try {
-            $area = Area::findFirst(
+            $province = Province::findFirst(
                 [
                     'conditions'    =>  'id = ' . $id
                 ]
             );   
 
             $response = new Response();
-            if ($area === false) {
+            if ($province === false) {
                 $response->setJsonContent(
                     [
                         'status' => 'NOT-FOUND'
@@ -72,7 +72,7 @@ class AreaController extends _ControllerBase
                 $response->setJsonContent(
                     [
                         'status' => 'FOUND',
-                        'data'   => $area
+                        'data'   => $province
                     ]
                 );
             }
@@ -89,21 +89,21 @@ class AreaController extends _ControllerBase
 
         $json = $this->request->getJsonRawBody();
 
-        $area = new Area();
+        $province = new Province();
         foreach ($json as $attrib => $value) {
-            $area->writeAttribute($attrib, $value);
+            $province->writeAttribute($attrib, $value);
         }
         
         try {
             
             $response = new Response();
             
-            if ($area->save()) { // Save returns last created id
+            if ($province->save()) { // Save returns last created id
                 $response->setStatusCode(201, 'Created');
                 $response->setJsonContent(
                     [
                         'status' => 'OK',
-                        'data'   => $area,
+                        'data'   => $province,
                     ]
                 );
             } else {
@@ -134,14 +134,14 @@ class AreaController extends _ControllerBase
         try {
             $json = $this->request->getJsonRawBody();
 
-            $area = Area::findFirst("id = " . $id);
+            $province = Province::findFirst("id = " . $id);
             foreach ($json as $attrib => $value) {
-                $area->writeAttribute($attrib, $value);
+                $province->writeAttribute($attrib, $value);
             }
 
             $response = new Response();
 
-            if ($area->update()) {
+            if ($province->update()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'
@@ -173,11 +173,11 @@ class AreaController extends _ControllerBase
     public function delete($id)
     {
         try {
-            $area = Area::findFirst("id = " . $id);
+            $province = Province::findFirst("id = " . $id);
 
             $response = new Response();
 
-            if ($area->delete()) {
+            if ($province->delete()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'

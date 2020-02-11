@@ -2,47 +2,47 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Response;
-use Models\Area;
+use Models\Indicator;
 
-class AreaController extends _ControllerBase
+class IndicatorController extends _ControllerBase
 {
 
     public function all()
     {
         try {
-            $areas = Area::find(
+            $indicator = Indicator::find(
                 [
-                    'order' =>  'name'
+                    'order' =>  'id'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($indicator as $indicator) {
+                $data[] = $indicator;
             }
             
             echo json_encode($data);
 
         } catch (\Exception $e) {            
-            $this->errorLogger->error(parent::_constructExceptionMessage($e));
+            $this->errorLogger->error(parent::_constructExceptionMessage($e));    
         }
     }
 
     public function search($keyword)
     {
         try {
-            $areas = Area::find(
+            $indicator = Indicator::find(
                 [
-                    'conditions'    => 'name LIKE \'%' . $keyword . '%\'',
-                    'order'         =>  'name'
+                    'conditions'    =>  'indicator LIKE \'%' . $keyword . '%\'',
+                    'order'         =>  'id'
                 ]
             );
 
             $data = [];
 
-            foreach ($areas as $area) {
-                $data[] = $area;
+            foreach ($indicator as $indicator) {
+                $data[] = $indicator;
             }
 
             echo json_encode($data);
@@ -55,14 +55,14 @@ class AreaController extends _ControllerBase
     public function get($id) 
     {
         try {
-            $area = Area::findFirst(
+            $indicator = Indicator::findFirst(
                 [
                     'conditions'    =>  'id = ' . $id
                 ]
             );   
 
             $response = new Response();
-            if ($area === false) {
+            if ($indicator === false) {
                 $response->setJsonContent(
                     [
                         'status' => 'NOT-FOUND'
@@ -72,7 +72,7 @@ class AreaController extends _ControllerBase
                 $response->setJsonContent(
                     [
                         'status' => 'FOUND',
-                        'data'   => $area
+                        'data'   => $indicator
                     ]
                 );
             }
@@ -89,21 +89,21 @@ class AreaController extends _ControllerBase
 
         $json = $this->request->getJsonRawBody();
 
-        $area = new Area();
+        $indicator = new Indicator();
         foreach ($json as $attrib => $value) {
-            $area->writeAttribute($attrib, $value);
+            $indicator->writeAttribute($attrib, $value);
         }
-        
+
         try {
             
             $response = new Response();
             
-            if ($area->save()) { // Save returns last created id
+            if ($indicator->save()) { // Save returns last created id
                 $response->setStatusCode(201, 'Created');
                 $response->setJsonContent(
                     [
                         'status' => 'OK',
-                        'data'   => $area,
+                        'data'   => $indicator,
                     ]
                 );
             } else {
@@ -134,14 +134,14 @@ class AreaController extends _ControllerBase
         try {
             $json = $this->request->getJsonRawBody();
 
-            $area = Area::findFirst("id = " . $id);
+            $indicator = Indicator::findFirst("id = " . $id);
             foreach ($json as $attrib => $value) {
-                $area->writeAttribute($attrib, $value);
+                $indicator->writeAttribute($attrib, $value);
             }
 
             $response = new Response();
 
-            if ($area->update()) {
+            if ($indicator->update()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'
@@ -173,11 +173,11 @@ class AreaController extends _ControllerBase
     public function delete($id)
     {
         try {
-            $area = Area::findFirst("id = " . $id);
+            $indicator = Indicator::findFirst("id = " . $id);
 
             $response = new Response();
 
-            if ($area->delete()) {
+            if ($indicator->delete()) {
                 $response->setJsonContent(
                     [
                         'status' => 'OK'

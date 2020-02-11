@@ -11,21 +11,39 @@ defined('APP_PATH') || define('APP_PATH', BASE_PATH . '/app');
 
 return new \Phalcon\Config([
     
-    'database' => [
+    'database' => [ // For CLI use only and for removal upon deployment
         'adapter'     => 'Mysql',
         'host'        => '10.0.14.23',
         'port'        => '3336',
         'username'    => 'root',
-        // 'password'    => 'D3vP@ssw0rd', // For CLI use only and for removal upon deployment
+        'password'    => 'D3vP@ssw0rd', 
+        'dbname'      => 'beis',
+        'charset'     => 'utf8'
+    ],
+    'db_css' => [
+        'adapter'     => 'Mysql',
+        'host'        => '10.0.14.23',
+        'port'        => '3336',
+        'username'    => 'root',
         // 'password'    => 'puSmXlr8MbmACBkMxBER6A==', // Blank password
         'password'    => 'decqvw/Nx3GeZIq5kUqIMSkjOD11LJfDJ4Vz', // D3vP@ssw0rd
         'dbname'      => 'css',
         'charset'     => 'utf8'
     ],
+    'db_beis' => [
+        'adapter'     => 'Mysql',
+        'host'        => '10.0.14.23',
+        'port'        => '3336',
+        'username'    => 'root',
+        // 'password'    => 'puSmXlr8MbmACBkMxBER6A==', // Blank password
+        'password'    => 'decqvw/Nx3GeZIq5kUqIMSkjOD11LJfDJ4Vz', // D3vP@ssw0rd
+        'dbname'      => 'beis',
+        'charset'     => 'utf8'
+    ],
     'application' => [
         'appDir'         => __DIR__ . '/',
         'controllersDir' => APP_PATH . '/controllers/',
-        'modelsDir'      => APP_PATH . '/models/',
+        'modelsDir'      => APP_PATH . '/../models/',
         'migrationsDir'  => APP_PATH . '/migrations/',
         'viewsDir'       => APP_PATH . '/views/',
         'pluginsDir'     => APP_PATH . '/plugins/',
@@ -40,7 +58,7 @@ return new \Phalcon\Config([
     ],
     'log_enabled'   => true,
     'log_settings'  => [
-        'path'      => 'logs',
+        'path'      => APP_PATH . '/logs',
         'format'    => '%date% [%type%] %message%',
         'date'      => 'D j H:i:s',
         'logLevel'  => Logger::DEBUG
@@ -48,11 +66,11 @@ return new \Phalcon\Config([
     'log_filenames' =>  [
         'session'   =>  'session.log',        
         'common'    =>  'common.log',
-        'de'        =>  'data_entry.log',
         'sql'       =>  'runtime_sql.log',
         'error'     =>  'error.log',        
     ],
-    'AES_Key'       =>  'bM6xyt`8P!Ubkw:Lf*',
+    'stacktrace'    =>  true, // Display stacktrace error on page
+    'encrypt_key'   =>  '%31.1e$i86e$f!8jz',
     'policy_url'    =>  'https://policy/',
     'session_lifetime'  =>  900,
     'until_timeout' =>  60,

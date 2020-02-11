@@ -2,7 +2,7 @@
 
 namespace Models;
 
-class Indicator extends \Phalcon\Mvc\Model
+class Region extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -15,74 +15,108 @@ class Indicator extends \Phalcon\Mvc\Model
      *
      * @var integer
      */
-    public $parent_id;
+    public $rank;
+
+    /**
+     *
+     * @var string
+     */
+    public $psgc_region_code;
+
+    /**
+     *
+     * @var string
+     */
+    public $region_name;
+
+    /**
+     *
+     * @var string
+     */
+    public $region_short_name;
+
+    /**
+     *
+     * @var string
+     */
+    public $address;
+
+    /**
+     *
+     * @var string
+     */
+    public $telephone_no;
+
+    /**
+     *
+     * @var string
+     */
+    public $fax_no;
+
+    /**
+     *
+     * @var string
+     */
+    public $email_address;
+
+    /**
+     *
+     * @var string
+     */
+    public $website;
+
+    /**
+     *
+     * @var string
+     */
+    public $head;
 
     /**
      *
      * @var integer
      */
-    public $area_id;
+    public $is_active;
 
     /**
      *
      * @var string
      */
-    public $indicator;
+    public $head_position;
 
     /**
      *
      * @var string
      */
-    public $description;
+    public $created_date;
+
+    /**
+     *
+     * @var integer
+     */
+    public $created_by;
 
     /**
      *
      * @var string
      */
-    public $answer_table;
+    public $modified_date;
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    public $answer_field;
-
-    /**
-     *
-     * @var string
-     */
-    public $primary_field;
-
-    /**
-     *
-     * @var string
-     */
-    public $alt_field;
-
-    /**
-     *
-     * @var string
-     */
-    public $type;
-
-    /**
-     *
-     * @var string
-     */
-    public $created_at;
+    public $modified_by;
 
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->setConnectionService('db_css'); // Explicity define the db connection used since working with multiple.
-        $this->setSchema("css");
-        $this->setSource("indicator");
-        $this->hasMany('id', 'Indicator', 'parent_id', ['alias' => 'Indicator']);
-        $this->hasMany('id', 'Mov', 'indicator_id', ['alias' => 'Mov']);
-        $this->belongsTo('area_id', 'Area', 'id', ['alias' => 'Area']);
-        $this->belongsTo('parent_id', 'Indicator', 'id', ['alias' => 'Indicator']);
+        $this->setConnectionService('db_beis'); // Explicity define the db connection used since working with multiple.
+        $this->setSchema("beis");
+        $this->setSource("region");
+        $this->hasMany('id', 'Models\Division', 'region_id', ['alias' => 'Division']);
+        $this->hasMany('id', 'Models\Province', 'region_id', ['alias' => 'Province']);
     }
 
     /**
@@ -92,14 +126,14 @@ class Indicator extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'indicator';
+        return 'region';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Indicator[]|Indicator|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return Region[]|Region|\Phalcon\Mvc\Model\ResultSetInterface
      */
     public static function find($parameters = null)
     {
@@ -110,7 +144,7 @@ class Indicator extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Indicator|\Phalcon\Mvc\Model\ResultInterface
+     * @return Region|\Phalcon\Mvc\Model\ResultInterface
      */
     public static function findFirst($parameters = null)
     {
