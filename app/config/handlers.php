@@ -119,3 +119,15 @@ $school->post('', 'add');
 $school->put('/{id:[0-9]+}', 'update');
 $school->delete('/{id:[0-9]+}', 'delete');
 $app->mount($school);
+
+// School Profile handler
+$schoolProfiles = new MicroCollection();
+$schoolProfiles->setHandler('SchoolProfilesController', true); // true for lazy loading
+$schoolProfiles->setPrefix('/schoolprofiles');
+$schoolProfiles->get('', 'all');
+$schoolProfiles->get('/{id:[0-9]+}', 'get');
+$schoolProfiles->get('/search/{name}', 'search');
+$schoolProfiles->post('', 'add');
+$schoolProfiles->put('/{id:[0-9]+}', 'update');
+$schoolProfiles->delete('/{id:[0-9]+}', 'delete');
+$app->mount($schoolProfiles);
