@@ -2,6 +2,7 @@
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Micro;
+use Phalcon\Events\Manager as EventsManager;
 
 error_reporting(E_ALL);
 
@@ -36,6 +37,27 @@ try {
      * Assign service locator to the application
      */
     $app = new Micro($di);
+
+    /**
+     * Activate CORS support
+     */
+    // $em = new EventsManager;
+    // $em->attach('micro:beforeHandleRoute', $di->get('cors'));
+
+    // $app->setEventsManager($em);
+
+    $app->before(function () use ($app) {
+    
+        $origin = $app->request->getHeader("ORIGIN") ? $app->request->getHeader("ORIGIN") : '*';
+    
+        $app->response->setHeader("Access-Control-Allow-Origin", $origin)
+            ->setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE,OPTIONS')
+            ->setHeader("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Range, Content-Disposition, Content-Type, Authorization')
+            ->setHeader("Access-Control-Allow-Credentials", true);
+    
+        $app->response->sendHeaders();  
+        return true;
+    });
 
     /**
      * Make $app accessible inside controllers

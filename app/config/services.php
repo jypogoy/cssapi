@@ -54,9 +54,7 @@ $di->set('crypt', function () {
     //$crypt->setCipher('AES-256-CBC');
 
     return $crypt;
-},
-true
-);
+}, true);
 
 /**
  * Database connection is created based on the parameters defined in the configuration file
@@ -106,6 +104,13 @@ $di->setShared('db_beis', function () {
     
     return $connection;
 });
+
+/**
+ * CORS
+ */
+// $di->set('cors', function() {
+//     return new CORSPlugin;
+// }, true);
 
 /**
  * Logger service

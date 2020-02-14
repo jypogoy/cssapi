@@ -11,14 +11,13 @@ $loader->registerDirs(
         $config->application->modelsDir,
         $config->application->pluginsDir,
         $config->application->libraryDir
-        ,
     ]
 )->register();
 
 
 $loader->registerNamespaces(
     [
-        'Models' => __DIR__ . '/../models/',
+        'Models'    =>  __DIR__ . '/../models/'
     ]
 );
 $loader->register();
